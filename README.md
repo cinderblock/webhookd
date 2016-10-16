@@ -1,6 +1,7 @@
 # Webhookd
 Another simple server to host webhook endpoints
 
+***Work in Progress:*** *This readme currently describes the intended interface. It's not done yet.*
 
 ## Install
 
@@ -10,31 +11,83 @@ cd webhookd
 npm install
 ```
 
-## Setup
+## Config
 
-We use npm config to set a bunch of settings:
+We use the npm package [config](https://www.npmjs.com/package/config) to parse configuration files.
+Files are loaded from `config/` based on hostname or other parameters in [this order](https://github.com/lorenwest/node-config/wiki/Configuration-Files#file-load-order).
 
-### Listen
+### `server.listen` `Integer|String`
+Sets the port or path for a unix socket to listen on.
 
-By default, the server will listen on port 9000 on all interfaces.
+### `server.hostname` `String` *optional*
+Sets the hostname to listen on when listening over IP.
 
-To change the port: `npm config set webhookd:port 9001`
+### `server.socketMode` *optional*
+Sets the socket file permissions with fs.chmod().
 
-To change the interface: `npm config set webhookd:hostname localhost`
+### `hooks` `String|Object` *optional*
+Technically optional, but this is required for this program to do anything.
 
-To use a socket instead: `npm config set webhookd:socket path/to/file.sock`
-
-If using a socket, set file mode: `npm config set webhookd:socketmode 660`
-
-### Endpoints File
-
-Create an endpoints file. See [`endpoints.sample.json`](endpoints.sample.json). Use npm config to tell it which file to use:
-
-```
-npm config set webhookd:endpointsFile ./endpoints.json
-```
+#### `hooks` `String` File Notation
+If hooks is a `String`, we will load that file and expect to load an object that has the properties of the `Object` notation.
 
 The leading `./` is important if using a relative path.
+
+#### `hooks` `Object` Notation
+If hooks is an `Object`, each property is a hook path.
+```
+{
+  "hook/path": hook
+}
+```
+
+### `hooks.*` `Object|String|Array`
+Each hook will follow the following object format.
+If a `String` is passed, it is shorthand for the `namespace` `type` loading a file.
+If a `Array` is passed, it is shorthand for the `sequence` `type`.
+
+### `hooks.*.type` `String`
+Defines the type of hook this is.
+
+#### `namespace` type
+Requires a `hooks` parameter and loads new hooks in a sub-path.
+Handled like the root level `hooks`.
+
+#### `echo` type
+Two optional parameters
+
+##### `response` `String` *optional*
+Send a response to the client
+
+##### `log` `String` *optional*
+Print to `console.log`
+
+#### `git-pull` type
+Runs a `git pull` on the specified working directory.
+
+##### `localBranch` `String`
+##### `remoteBranch` `String`
+##### `localWorkDir` `String`
+
+#### `sequence` type
+
+##### `sequence` `Array`
+A list of actions to make in order.
+This is an `Array` of `hook` `Objects`.
+Cannot contain a `namespace` `type` hook.
+
+### `key` `String`
+If a `key` is specified for the hook, it must be found in one of a couple places:
+ - The last part of the path, before the query string
+ - Be the entire query string
+ - Match the `key` of the query string
+ - Match a header specified with `keyHeader`
+
+### `keyHeader` `String`
+The name of the header that should match the key
+
+### `name` `String`
+Human readable name for the hook for use in logs
 
 ## Update
 

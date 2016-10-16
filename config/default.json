@@ -1,0 +1,11 @@
+{
+  "server": {
+      "listen": 9000
+  },
+  "hooks": {
+    "test": {
+      "type": "echo",
+      "message": "Hello!"
+    }
+  }
+}

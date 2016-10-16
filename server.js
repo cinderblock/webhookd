@@ -3,7 +3,7 @@ var bodyParser = require('body-parser');
 var http = require('http');
 
 var serverStarter = require('server-starter');
-var config = require('./config.js');
+var config = require('config');
 var gitPull = require('./git-pull.js');
 
 var app = express();
