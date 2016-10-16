@@ -1,0 +1,25 @@
+{
+  "name": "webhookd",
+  "version": "0.0.0",
+  "description": "Another simple server to host webhook endpoints",
+  "main": "server.js",
+  "scripts": {
+    "server-dev": "nodemon .",
+    "server": "node ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:cinderblock/webhookd.git"
+  },
+  "author": "Cameron Tacklind <cameron@tacklind.com>",
+  "license": "MIT",
+  "dependencies": {
+    "body-parser": "^1.15.2",
+    "express": "^4.14.0",
+    "nodegit": "^0.16.0",
+    "server-starter": "^1.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^1.10.2"
+  }
+}

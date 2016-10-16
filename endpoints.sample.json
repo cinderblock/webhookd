@@ -1,0 +1,9 @@
+{
+  "test" : {
+    "name": "Test repo. This directory",
+    "type": "git",
+    "localBranch": "master",
+    "remoteBranch": "origin/master",
+    "localWorkDir": "."
+  }
+}
